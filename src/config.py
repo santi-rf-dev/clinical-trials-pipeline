@@ -20,5 +20,6 @@ class Config:
     db_host: str = os.environ["DB_HOST"]
     db_port: int = int(os.environ["DB_PORT"])
     db_name: str = os.environ["DB_NAME"]
+    db_schema: str = os.environ["DB_SCHEMA"]
     db_user: str = os.environ["DB_USER"]
     db_password: str = os.environ["DB_PASSWORD"]
