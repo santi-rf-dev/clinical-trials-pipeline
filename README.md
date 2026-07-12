@@ -196,7 +196,7 @@ clinical-trials-pipeline/
 
 ---
 
-## Documentation
+# Documentation
 
 Additional project documentation:
 
@@ -205,6 +205,6 @@ Additional project documentation:
 
 ---
 
-## Author
+# Author
 
 Developed by **Santi Rodríguez**
