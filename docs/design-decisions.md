@@ -31,6 +31,9 @@ ClinicalTrials.gov API
       Transform Layer
             │
             ▼
+      Validation Layer
+            │
+            ▼
  PostgreSQL (Normalized)
             │
             ▼
@@ -55,7 +58,7 @@ The `derivedSection` was intentionally excluded because it contains metadata enr
 
 # ETL Strategy
 
-The pipeline is organized into three independent stages.
+The project follows a classic ETL architecture complemented by a dedicated validation layer.
 
 ## Extract
 
@@ -140,7 +143,7 @@ Several transformations are applied during the ETL process to improve data consi
 These include:
 
 - trimming leading and trailing spaces
-- converting condition names to uppercase
+- normalizing condition and intervention names to uppercase
 - removing duplicate relationships
 - handling missing values
 - converting partial dates into SQL-compatible dates
@@ -173,15 +176,17 @@ This simplification is considered acceptable for the analytical goals of this pr
 
 # Data Validation
 
-Basic validation is performed during the transformation stage.
+Data validation is performed after the transformation stage and before loading the data into PostgreSQL.
+
+The validation layer verifies that the transformed dataset satisfies a number of integrity rules before any data is written to the database.
 
 Examples include:
 
-- mandatory study identifier (`nct_id`)
-- removal of duplicate relationships
+- mandatory study identifier
+- duplicate study detection
 - non-negative enrollment values
 - valid geographic coordinates
-- null handling
+- referential integrity between tables
 
 ---
 
@@ -222,7 +227,9 @@ These constraints guarantee referential integrity while keeping the implementati
 
 The prototype implements a **full refresh** loading strategy.
 
-Each execution recreates the target schema and loads the latest data extracted from the ClinicalTrials.gov API.
+Each execution recreates the target schema only after the extracted data has been successfully transformed and validated.
+
+This prevents the previous dataset from being removed if the ETL process fails before the loading stage.
 
 This approach keeps the implementation deterministic and simple for the purposes of the technical challenge.
 

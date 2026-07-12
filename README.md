@@ -6,9 +6,20 @@ This project implements an ETL pipeline that retrieves clinical trial data from 
 
 ---
 
+# Features
+
+- ClinicalTrials.gov API integration
+- Normalized PostgreSQL schema
+- Dockerized PostgreSQL
+- Automated ETL pipeline
+- SQL analytical queries
+- Unit tests
+
+---
+
 # Configuration
 
-Before running the application, create the configuration file described in:
+Before running the application, create the `.env` configuration file following the instructions in:
 
 - **Configuration Guide** (`docs/configuration.md`)
 
@@ -46,7 +57,7 @@ Start the database:
 docker compose up -d
 ```
 
-Docker Compose starts a PostgreSQL instance and creates the `clinical_trials` database.
+Docker Compose starts a PostgreSQL instance using the configuration defined in the `.env` file.
 
 The database schema is created automatically by the ETL application when `python main.py` is executed.
 
@@ -118,7 +129,7 @@ The application follows a classic **Extract – Transform – Load (ETL)** archi
 
 ---
 
-# Database Schema
+# Data Model
 
 The normalized schema contains the following tables:
 
@@ -149,28 +160,38 @@ These queries demonstrate how the normalized schema can be used to answer the bu
 
 ---
 
+# Testing
+
+Run the complete test suite:
+
+```bash
+pytest -v
+```
+
+The tests cover:
+
+- Data transformation
+- Data validation
+- Referential integrity
+- Utility functions
+
+---
+
 # Project Structure
 
 ```text
 clinical-trials-pipeline/
 ├── docs/
-│   ├── configuration.md
-│   └── design-decisions.md
 ├── notebooks/
-│   └── api_exploration.ipynb
 ├── sql/
-│   ├── schema.sql
-│   └── analytics.sql
 ├── src/
-│   ├── extract.py
-│   ├── transform.py
-│   ├── load.py
-│   └── ...
 ├── tests/
-├── main.py
-├── requirements.txt
+├── .env
+├── .gitignore
 ├── compose.yaml
-└── README.md
+├── main.py
+├── README.md
+└── requirements.txt
 ```
 
 ---
@@ -181,8 +202,9 @@ Additional documentation is available in:
 
 - **Configuration Guide** (`docs/configuration.md`)
 - **Design Decisions** (`docs/design-decisions.md`)
+
 ---
 
 ## Author
 
-**Santi Rodríguez**
+Developed by **Santi Rodríguez**
