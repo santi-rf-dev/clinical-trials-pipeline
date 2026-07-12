@@ -196,12 +196,12 @@ clinical-trials-pipeline/
 
 ---
 
-# Documentation
+## Documentation
 
-Additional documentation is available in:
+Additional project documentation:
 
-- **Configuration Guide** (`docs/configuration.md`)
-- **Design Decisions** (`docs/design-decisions.md`)
+- 📖 **[Configuration Guide](docs/configuration.md)** – Environment configuration
+- 🏗️ **[Design Decisions](docs/design-decisions.md)** – Architecture and design rationale
 
 ---
 
