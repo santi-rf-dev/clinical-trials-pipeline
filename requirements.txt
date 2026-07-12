@@ -1,0 +1,9 @@
+black==26.5.1
+flake8==7.3.0
+isort==8.0.1
+pandas==3.0.3
+psycopg[binary]==3.2.10
+pytest==8.4.1
+python-dotenv==1.2.2
+requests==2.34.2
+sqlalchemy==2.0.51
