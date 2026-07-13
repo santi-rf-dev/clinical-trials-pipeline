@@ -21,7 +21,7 @@ An end-to-end ETL pipeline that retrieves clinical trial data from the ClinicalT
 
 Before running the application, create the `.env` configuration file following the instructions in:
 
-- **Configuration Guide** (`docs/configuration.md`)
+- **[Configuration Guide](docs/configuration.md)**
 
 ---
 
@@ -142,7 +142,7 @@ The application follows a classic **Extract – Transform – Load (ETL)** archi
 
 - Parse the API response.
 - Normalize the JSON structure.
-- Standardize condition names.
+- Standardize condition and intervention names.
 - Convert partial dates into SQL-compatible dates.
 - Build a normalized relational model.
 
@@ -219,7 +219,7 @@ Additional project documentation:
 
 - 📖 **[Configuration Guide](docs/configuration.md)** – Environment configuration
 - 🏗️ **[Design Decisions](docs/design-decisions.md)** – Architecture and design rationale
-- 💡 **[Bonus Questions](docs/bonus-questions.md)** – Scalability, monitoring, compliance, monitoring and security considerations
+- 💡 **[Bonus Questions](docs/bonus-questions.md)** – Scalability, data quality, compliance, monitoring and security considerations
 
 ---
 

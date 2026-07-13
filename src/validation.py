@@ -13,7 +13,7 @@ def validate_tables(tables: dict[str, pd.DataFrame]) -> None:
 
 
 def validate_studies(studies: pd.DataFrame) -> None:
-    """Validate location coordinates."""
+    """Validate study data."""
 
     # Validate mandatory study identifiers
     if studies["nct_id"].isna().any():
