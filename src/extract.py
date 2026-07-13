@@ -12,9 +12,12 @@ def fetch_studies(
     max_studies: int,
     page_size: int,
 ) -> list[dict[str, Any]]:
-    """Fetch clinical trial studies from the ClinicalTrials.gov API."""
+    """Fetch clinical trial studies from the ClinicalTrials.gov API with pagination."""
 
     # Validate input parameters
+    if request_timeout_seconds <= 0:
+        raise ValueError("request_timeout_seconds must be greater than 0.")
+
     if max_studies <= 0:
         raise ValueError("max_studies must be greater than 0.")
 
@@ -62,7 +65,7 @@ def fetch_studies(
             len(studies),
         )
 
-        # Stop when the requested number of studies is reached
+        # Return the requested number of studies
         if len(studies) >= max_studies:
             return studies[:max_studies]
 

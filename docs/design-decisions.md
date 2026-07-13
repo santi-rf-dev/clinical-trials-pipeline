@@ -4,7 +4,7 @@ This document summarizes the main architectural, modeling and implementation dec
 
 ---
 
-# Dataset
+## Dataset
 
 The project uses the **ClinicalTrials.gov API v2** as the primary data source.
 
@@ -17,34 +17,34 @@ The API was intentionally selected instead of a static dataset because it better
 
 ---
 
-# Architecture
+## Architecture
 
 The project follows a classic ETL architecture with a clear separation of responsibilities.
 
 ```text
 ClinicalTrials.gov API
-            │
-            ▼
-        Extract Layer
-            │
-            ▼
-      Transform Layer
-            │
-            ▼
-      Validation Layer
-            │
-            ▼
- PostgreSQL (Normalized)
-            │
-            ▼
- Analytical SQL Queries
+          │
+          ▼
+       Extract
+          │
+          ▼
+      Transform
+          │
+          ▼
+      Validation
+          │
+          ▼
+PostgreSQL (Normalized)
+          │
+          ▼
+Analytical SQL Queries
 ```
 
 Each stage is implemented independently, making the pipeline easier to maintain, test and extend.
 
 ---
 
-# Data Exploration
+## Data Exploration
 
 Before implementing the pipeline, an exploratory analysis of the API response was performed.
 
@@ -56,29 +56,33 @@ The `derivedSection` was intentionally excluded because it contains metadata enr
 
 ---
 
-# ETL Strategy
+## ETL Strategy
 
 The project follows a classic ETL architecture complemented by a dedicated validation layer.
 
-## Extract
+### Extract
 
 Responsible for retrieving studies from the ClinicalTrials.gov API, handling pagination and validating HTTP responses.
 
-## Transform
+### Transform
 
 Responsible for parsing the API response, normalizing the data, applying data quality rules and generating the relational entities.
 
-## Load
+### Validation
+
+Responsible for validating the transformed data before loading it into PostgreSQL, ensuring that integrity rules are satisfied and preventing invalid data from being persisted.
+
+### Load
 
 Responsible for creating the PostgreSQL schema and loading the transformed data while preserving referential integrity.
 
-The current implementation performs a **full refresh** on every execution by recreating the target schema before loading the latest extracted dataset.
+The current implementation performs a full refresh by recreating the target schema after the extracted data has been successfully transformed and validated.
 
 ---
 
-# Data Model
+## Data Model
 
-A **normalized relational model** was selected.
+A normalized relational model was selected.
 
 The source data contains multiple one-to-many and many-to-many relationships between studies, conditions, interventions and locations.
 
@@ -105,7 +109,7 @@ The following tables were implemented:
 
 ---
 
-# Why not a Star Schema?
+## Why not a Star Schema?
 
 A dimensional model was intentionally not used.
 
@@ -115,7 +119,7 @@ A star schema would be more appropriate as a downstream analytical layer rather 
 
 ---
 
-# Primary Keys
+## Primary Keys
 
 The ClinicalTrials.gov identifier (`nct_id`) is used as the primary key of the `studies` table.
 
@@ -125,7 +129,7 @@ The remaining entities use surrogate integer primary keys.
 
 ---
 
-# Relationships
+## Relationships
 
 Many-to-many relationships are implemented through bridge tables.
 
@@ -136,7 +140,7 @@ Locations are modeled as a child entity of studies because each study may be con
 
 ---
 
-# Data Standardization
+## Data Standardization
 
 Several transformations are applied during the ETL process to improve data consistency.
 
@@ -152,7 +156,7 @@ These transformations are intentionally performed in the ETL layer rather than i
 
 ---
 
-# Date Handling
+## Date Handling
 
 ClinicalTrials.gov provides dates with different levels of precision.
 
@@ -174,7 +178,7 @@ This simplification is considered acceptable for the analytical goals of this pr
 
 ---
 
-# Data Validation
+## Data Validation
 
 Data validation is performed after the transformation stage and before loading the data into PostgreSQL.
 
@@ -190,7 +194,7 @@ Examples include:
 
 ---
 
-# Scope
+## Scope
 
 Some API modules were intentionally excluded from the first version.
 
@@ -205,11 +209,11 @@ Potential future extensions:
 - sponsorCollaboratorsModule
 - outcomesModule
 
-These modules were excluded because they are not required to answer the analytical questions proposed in the challenge.
+These modules were excluded because they are not required to support the analytical objectives of this project.
 
 ---
 
-# Database Constraints
+## Database Constraints
 
 The schema includes the following integrity constraints:
 
@@ -223,7 +227,7 @@ These constraints guarantee referential integrity while keeping the implementati
 
 ---
 
-# Loading Strategy
+## Loading Strategy
 
 The prototype implements a **full refresh** loading strategy.
 
@@ -231,13 +235,13 @@ Each execution recreates the target schema only after the extracted data has bee
 
 This prevents the previous dataset from being removed if the ETL process fails before the loading stage.
 
-This approach keeps the implementation deterministic and simple for the purposes of the technical challenge.
+This approach keeps the implementation deterministic, easy to understand and appropriate for this prototype.
 
 A production implementation would most likely replace this strategy with an incremental loading mechanism (UPSERT or CDC).
 
 ---
 
-# Indexing Strategy
+## Indexing Strategy
 
 Indexes were added only on columns expected to be frequently used for filtering or aggregation.
 
@@ -253,28 +257,28 @@ The objective is to balance query performance and insertion cost.
 
 ---
 
-# Future Improvements
+## Future Improvements
 
-## Data Engineering
+### Data Engineering
 
 - Incremental loading
-- Change Data Capture (CDC)
-- Workflow orchestration (Airflow or Prefect)
+- Distributed processing with PySpark
+- Database partitioning
 
-## Data Quality
+### Data Quality
 
 - MeSH terminology normalization
 - Data quality reports
 - Additional validation rules
 
-## Data Model
+### Data Model
 
 - Sponsor information
 - Outcome measures
 - Eligibility criteria
 
-## Operations
+### Operations
 
-- Pipeline monitoring
+- Pipeline monitoring and alerting
 - Enhanced logging
 - Data lineage

@@ -1,15 +1,15 @@
 # Clinical Trial Data Pipeline
 
-Technical challenge for the **MIGx Data Engineering** position.
+An end-to-end ETL pipeline that retrieves clinical trial data from the ClinicalTrials.gov API v2, transforms it into a normalized relational model and loads it into PostgreSQL for analytical querying.
 
-This project implements an ETL pipeline that retrieves clinical trial data from the **ClinicalTrials.gov API v2**, transforms the raw JSON into a normalized relational model and stores it in a PostgreSQL database for analytical purposes.
+**Technology stack:** Python, pandas, PostgreSQL, SQLAlchemy, Docker and ClinicalTrials.gov API v2.
 
 ---
 
-# Features
+## Features
 
 - ClinicalTrials.gov API integration
-- Normalized PostgreSQL schema
+- Normalized relational database schema
 - Dockerized PostgreSQL
 - Automated ETL pipeline
 - SQL analytical queries
@@ -17,7 +17,7 @@ This project implements an ETL pipeline that retrieves clinical trial data from 
 
 ---
 
-# Configuration
+## Configuration
 
 Before running the application, create the `.env` configuration file following the instructions in:
 
@@ -25,11 +25,11 @@ Before running the application, create the `.env` configuration file following t
 
 ---
 
-# Installation
+## Installation
 
 It is recommended to use a dedicated Python virtual environment to isolate the project's dependencies.
 
-## Windows
+### Windows
 
 ```bash
 py -m venv .venv
@@ -37,7 +37,7 @@ py -m venv .venv
 pip install -r requirements.txt
 ```
 
-## macOS / Linux
+### macOS / Linux
 
 ```bash
 python3 -m venv .venv
@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 ---
 
-# Database
+## Database
 
 The project uses **PostgreSQL**, which is provided through Docker Compose.
 
@@ -76,7 +76,32 @@ docker compose up -d
 
 ---
 
-# Execution
+## Architecture
+
+```text
+ClinicalTrials.gov API
+          │
+          ▼
+       Extract
+          │
+          ▼
+      Transform
+          │
+          ▼
+       Validate
+          │
+          ▼
+PostgreSQL Database
+          │
+          ▼
+Analytical SQL Queries
+```
+
+The application follows a modular ETL architecture. Clinical trial data is retrieved from the API, transformed into normalized relational entities, validated before loading and stored in PostgreSQL for analytical querying.
+
+---
+
+## Execution
 
 Once the database is running, execute the ETL pipeline from the project root:
 
@@ -102,18 +127,18 @@ Pipeline completed
 
 ---
 
-# ETL Pipeline
+## ETL Pipeline
 
 The application follows a classic **Extract – Transform – Load (ETL)** architecture.
 
-## Extract
+### Extract
 
 - Retrieve clinical trial studies from the ClinicalTrials.gov API.
 - Handle API pagination.
 - Validate HTTP responses.
 - Return the raw study data.
 
-## Transform
+### Transform
 
 - Parse the API response.
 - Normalize the JSON structure.
@@ -121,17 +146,18 @@ The application follows a classic **Extract – Transform – Load (ETL)** archi
 - Convert partial dates into SQL-compatible dates.
 - Build a normalized relational model.
 
-## Load
+### Load
 
 - Perform a full-refresh load.
+- Recreate the target schema.
 - Populate all relational tables.
 - Preserve referential integrity.
 
 ---
 
-# Data Model
+## Data Model
 
-The normalized schema contains the following tables:
+The normalized relational schema consists of the following tables:
 
 - studies
 - conditions
@@ -148,7 +174,7 @@ sql/schema.sql
 
 ---
 
-# Analytical Queries
+## Analytical Queries
 
 Example analytical SQL queries are available in:
 
@@ -156,11 +182,11 @@ Example analytical SQL queries are available in:
 sql/analytics.sql
 ```
 
-These queries demonstrate how the normalized schema can be used to answer the business questions proposed in the technical challenge.
+These queries demonstrate how the normalized schema can be used to answer common analytical questions about clinical trial data.
 
 ---
 
-# Testing
+## Testing
 
 Run the complete test suite:
 
@@ -168,7 +194,7 @@ Run the complete test suite:
 pytest -v
 ```
 
-The tests cover:
+The test suite covers:
 
 - Data transformation
 - Data validation
@@ -177,34 +203,70 @@ The tests cover:
 
 ---
 
-# Project Structure
+## Code Quality
 
-```text
-clinical-trials-pipeline/
-├── docs/
-├── notebooks/
-├── sql/
-├── src/
-├── tests/
-├── .env
-├── .gitignore
-├── compose.yaml
-├── main.py
-├── README.md
-└── requirements.txt
-```
+Code quality was verified using standard Python development tools:
+
+- Black (code formatting)
+- isort (import ordering)
+- flake8 (static analysis)
 
 ---
 
-# Documentation
+## Documentation
 
 Additional project documentation:
 
 - 📖 **[Configuration Guide](docs/configuration.md)** – Environment configuration
 - 🏗️ **[Design Decisions](docs/design-decisions.md)** – Architecture and design rationale
+- 💡 **[Bonus Questions](docs/bonus-questions.md)** – Scalability, monitoring, compliance, monitoring and security considerations
 
 ---
 
-# Author
+## Trade-offs and Limitations
 
-Developed by **Santi Rodríguez**
+This prototype intentionally prioritizes clarity and maintainability over production-level complexity.
+
+Current limitations include:
+
+- Full refresh loading instead of incremental loading.
+- Single data source (ClinicalTrials.gov API v2).
+- Sequential execution without workflow orchestration.
+- Local PostgreSQL deployment intended for development purposes.
+- Basic data quality validation focused on the challenge requirements.
+
+---
+
+## Time Allocation
+
+Approximate effort invested:
+
+| Task | Time |
+|------|-----:|
+| Environment setup |  1 h |
+| Data exploration & schema design |  3 h |
+| ETL implementation |  2 h |
+| SQL analytics |  1 h |
+| Testing |  1 h |
+| Documentation & polishing |  3 h |
+
+**Total effort:** ~11 hours
+
+---
+
+## AI Assistance
+
+AI-assisted development tools (ChatGPT) were used during the development of this project to support:
+
+- brainstorming and design discussions
+- code review and refactoring suggestions
+- documentation improvements
+- test case design
+
+All architectural decisions and implementation details were reviewed, understood and validated by the author.
+
+---
+
+## Author
+
+**Santi Rodríguez**
