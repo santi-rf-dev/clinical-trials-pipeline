@@ -1,12 +1,12 @@
 # Clinical Trial Data Pipeline
 
-Technical challenge for the **MIGx Data Engineering** position.
+An end-to-end ETL pipeline that retrieves clinical trial data from the ClinicalTrials.gov API v2, transforms it into a normalized relational model and loads it into PostgreSQL for analytical querying.
 
-The solution demonstrates a modular ETL architecture, relational data modeling, automated data loading and analytical querying using a publicly available clinical trials dataset.
+**Technology stack:** Python, pandas, PostgreSQL, SQLAlchemy, Docker and ClinicalTrials.gov API v2.
 
 ---
 
-# Features
+## Features
 
 - ClinicalTrials.gov API integration
 - Normalized relational database schema
@@ -17,7 +17,7 @@ The solution demonstrates a modular ETL architecture, relational data modeling, 
 
 ---
 
-# Configuration
+## Configuration
 
 Before running the application, create the `.env` configuration file following the instructions in:
 
@@ -25,11 +25,11 @@ Before running the application, create the `.env` configuration file following t
 
 ---
 
-# Installation
+## Installation
 
 It is recommended to use a dedicated Python virtual environment to isolate the project's dependencies.
 
-## Windows
+### Windows
 
 ```bash
 py -m venv .venv
@@ -37,7 +37,7 @@ py -m venv .venv
 pip install -r requirements.txt
 ```
 
-## macOS / Linux
+### macOS / Linux
 
 ```bash
 python3 -m venv .venv
@@ -47,7 +47,7 @@ pip install -r requirements.txt
 
 ---
 
-# Database
+## Database
 
 The project uses **PostgreSQL**, which is provided through Docker Compose.
 
@@ -76,7 +76,7 @@ docker compose up -d
 
 ---
 
-# Architecture
+## Architecture
 
 ```text
 ClinicalTrials.gov API
@@ -101,7 +101,7 @@ The application follows a modular ETL architecture. Clinical trial data is retri
 
 ---
 
-# Execution
+## Execution
 
 Once the database is running, execute the ETL pipeline from the project root:
 
@@ -127,18 +127,18 @@ Pipeline completed
 
 ---
 
-# ETL Pipeline
+## ETL Pipeline
 
 The application follows a classic **Extract – Transform – Load (ETL)** architecture.
 
-## Extract
+### Extract
 
 - Retrieve clinical trial studies from the ClinicalTrials.gov API.
 - Handle API pagination.
 - Validate HTTP responses.
 - Return the raw study data.
 
-## Transform
+### Transform
 
 - Parse the API response.
 - Normalize the JSON structure.
@@ -146,7 +146,7 @@ The application follows a classic **Extract – Transform – Load (ETL)** archi
 - Convert partial dates into SQL-compatible dates.
 - Build a normalized relational model.
 
-## Load
+### Load
 
 - Perform a full-refresh load.
 - Recreate the target schema.
@@ -155,9 +155,9 @@ The application follows a classic **Extract – Transform – Load (ETL)** archi
 
 ---
 
-# Data Model
+## Data Model
 
-The normalized schema contains the following tables:
+The normalized relational schema consists of the following tables:
 
 - studies
 - conditions
@@ -174,7 +174,7 @@ sql/schema.sql
 
 ---
 
-# Analytical Queries
+## Analytical Queries
 
 Example analytical SQL queries are available in:
 
@@ -182,11 +182,11 @@ Example analytical SQL queries are available in:
 sql/analytics.sql
 ```
 
-These queries demonstrate how the normalized schema can be used to answer the business questions proposed in the technical challenge.
+These queries demonstrate how the normalized schema can be used to answer common analytical questions about clinical trial data.
 
 ---
 
-# Testing
+## Testing
 
 Run the complete test suite:
 
@@ -194,7 +194,7 @@ Run the complete test suite:
 pytest -v
 ```
 
-The tests cover the core transformation, validation and utility functions of the pipeline.
+The test suite covers:
 
 - Data transformation
 - Data validation
@@ -203,7 +203,7 @@ The tests cover the core transformation, validation and utility functions of the
 
 ---
 
-# Code Quality
+## Code Quality
 
 Code quality was verified using standard Python development tools:
 
@@ -213,35 +213,17 @@ Code quality was verified using standard Python development tools:
 
 ---
 
-# Project Structure
-
-```text
-clinical-trials-pipeline/
-├── docs/
-├── notebooks/
-├── sql/
-├── src/
-├── tests/
-├── .env
-├── compose.yaml
-├── main.py
-├── README.md
-└── requirements.txt
-```
-
----
-
-# Documentation
+## Documentation
 
 Additional project documentation:
 
 - 📖 **[Configuration Guide](docs/configuration.md)** – Environment configuration
 - 🏗️ **[Design Decisions](docs/design-decisions.md)** – Architecture and design rationale
-- 💡 **[Bonus Questions](docs/bonus-questions.md)** – Bonus Questions
+- 💡 **[Bonus Questions](docs/bonus-questions.md)** – Scalability, monitoring, compliance, monitoring and security considerations
 
 ---
 
-# Trade-offs and Limitations
+## Trade-offs and Limitations
 
 This prototype intentionally prioritizes clarity and maintainability over production-level complexity.
 
@@ -255,7 +237,7 @@ Current limitations include:
 
 ---
 
-# Time Allocation
+## Time Allocation
 
 Approximate effort invested:
 
@@ -268,11 +250,11 @@ Approximate effort invested:
 | Testing |  1 h |
 | Documentation & polishing |  3 h |
 
-Total: ~11 hours
+**Total effort:** ~11 hours
 
 ---
 
-# AI Assistance
+## AI Assistance
 
 AI-assisted development tools (ChatGPT) were used during the development of this project to support:
 
@@ -281,10 +263,10 @@ AI-assisted development tools (ChatGPT) were used during the development of this
 - documentation improvements
 - test case design
 
-All architectural decisions, implementation details and submitted code were reviewed, understood and validated by the author.
+All architectural decisions and implementation details were reviewed, understood and validated by the author.
 
 ---
 
-# Author
+## Author
 
-Developed by **Santi Rodríguez**
+**Santi Rodríguez**
