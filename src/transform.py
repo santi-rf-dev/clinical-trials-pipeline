@@ -6,23 +6,25 @@ import pandas as pd
 
 def parse_partial_date(value: str | None) -> date | None:
     """
-    Convert ClinicalTrials.gov partial dates into Python dates.
+    Parse a partial ISO date into a Python date.
 
-    Rules:
-        YYYY       -> YYYY-01-01
-        YYYY-MM    -> YYYY-MM-01
-        YYYY-MM-DD -> unchanged
+    Supported formats:
+    - YYYY
+    - YYYY-MM
+    - YYYY-MM-DD
 
     Args:
-        value: Date string returned by the API.
+        value: Date string to parse.
 
     Returns:
-        Parsed date or None when the input is missing.
+        Parsed date or None when the value is empty.
+
+    Raises:
+        ValueError: If the date format is unsupported or invalid.
     """
     if not value:
         return None
 
-    # Select the expected date format
     date_formats = {
         4: "%Y",
         7: "%Y-%m",
@@ -34,7 +36,10 @@ def parse_partial_date(value: str | None) -> date | None:
     if date_format is None:
         raise ValueError(f"Unsupported date format: {value}")
 
-    return pd.to_datetime(value, format=date_format).date()
+    try:
+        return pd.to_datetime(value, format=date_format).date()
+    except ValueError as exc:
+        raise ValueError(f"Unsupported date format: {value}") from exc
 
 
 def normalize_name(value: str) -> str:

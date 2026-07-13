@@ -3,9 +3,8 @@ import pytest
 
 from src.validation import validate_locations, validate_relationships, validate_studies
 
+
 # Study validations
-
-
 def test_validate_studies_accepts_valid_data():
     studies = pd.DataFrame(
         {
@@ -63,8 +62,6 @@ def test_validate_studies_rejects_negative_enrollment():
 
 
 # Location validations
-
-
 def test_validate_locations_accepts_valid_coordinates():
     locations = pd.DataFrame(
         {
@@ -107,8 +104,6 @@ def test_validate_locations_rejects_invalid_longitude():
 
 
 # Relationship validations
-
-
 def test_validate_relationships_accepts_valid_references():
     tables = {
         "studies": pd.DataFrame(
