@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from pathlib import Path
 
@@ -38,11 +39,15 @@ def create_database_engine(
 def initialize_database(
     engine: Engine,
     schema: str,
-    schema_path: str | Path = "sql/schema.sql",
 ) -> None:
-    """Create the database schema from a SQL file."""
+    """Recreate the PostgreSQL schema from the project SQL file."""
     validate_schema_name(schema)
 
+    schema_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "sql",
+        "schema.sql",
+    )
     sql = Path(schema_path).read_text(encoding="utf-8")
     sql = sql.replace("{{schema}}", schema)
 
@@ -121,6 +126,7 @@ def load_tables(
 
     logger.info("Starting database load.")
 
+    # Load main and lookup tables
     tables["studies"].to_sql(
         "studies",
         engine,
@@ -157,6 +163,7 @@ def load_tables(
         method="multi",
     )
 
+    # Resolve generated identifiers
     study_conditions = build_study_conditions(
         engine=engine,
         study_conditions=tables["study_conditions"],

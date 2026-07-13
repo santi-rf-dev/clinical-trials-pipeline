@@ -33,7 +33,7 @@ def main() -> None:
     )
 
     try:
-        # Extract raw studies from the ClinicalTrials.gov API
+        # Extract raw studies from the ClinicalTrials.gov
         raw_studies = fetch_studies(
             base_url=conf.base_url,
             request_timeout_seconds=conf.request_timeout_seconds,

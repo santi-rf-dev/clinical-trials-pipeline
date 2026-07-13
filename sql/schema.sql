@@ -1,8 +1,8 @@
-DROP SCHEMA IF EXISTS clinical_trials CASCADE;
+DROP SCHEMA IF EXISTS {{schema}} CASCADE;
 
-CREATE SCHEMA clinical_trials;
+CREATE SCHEMA {{schema}};
 
-SET search_path TO clinical_trials;
+SET search_path TO {{schema}};
 
 
 CREATE TABLE studies (

@@ -1,6 +1,15 @@
 -- ============================================================
+-- Clinical Trial Analytics
+--
+-- These queries assume the default schema: clinical_trials.
+-- If DB_SCHEMA is changed, update the schema references below.
+-- ============================================================
+
+
+-- ============================================================
 -- 1. Number of trials by study type and phase
 -- ============================================================
+
 SELECT study_type, phase,
        COUNT(*) AS total_trials
   FROM clinical_trials.studies
@@ -11,6 +20,7 @@ SELECT study_type, phase,
 -- ============================================================
 -- 2. Most common conditions being studied
 -- ============================================================
+
 SELECT c.condition_name,
        COUNT(DISTINCT sc.nct_id) AS total_trials
   FROM clinical_trials.study_conditions AS sc
@@ -26,22 +36,26 @@ SELECT c.condition_name,
 -- ============================================================
 -- A minimum number of trials is required to avoid considering
 -- interventions with a 100% completion rate based on only one study.
+
 WITH intervention_completion AS (
     SELECT i.intervention_id, i.intervention_name, i.intervention_type,
-        COUNT(DISTINCT si.nct_id) AS total_trials,
-        COUNT(DISTINCT si.nct_id) FILTER (
-            WHERE s.overall_status = 'COMPLETED'
-        ) AS completed_trials
+           COUNT(DISTINCT si.nct_id) AS total_trials,
+           COUNT(DISTINCT si.nct_id) FILTER (
+               WHERE s.overall_status = 'COMPLETED'
+           ) AS completed_trials
       FROM clinical_trials.study_interventions AS si
-          INNER JOIN clinical_trials.interventions AS i
-             ON si.intervention_id = i.intervention_id
-          INNER JOIN clinical_trials.studies AS s
-             ON si.nct_id = s.nct_id
-     GROUP BY i.intervention_id, i.intervention_name,i.intervention_type
+           INNER JOIN clinical_trials.interventions AS i
+              ON si.intervention_id = i.intervention_id
+           INNER JOIN clinical_trials.studies AS s
+              ON si.nct_id = s.nct_id
+     GROUP BY i.intervention_id, i.intervention_name, i.intervention_type
 )
 
 SELECT intervention_name, intervention_type, total_trials, completed_trials,
-    ROUND(100.0 * completed_trials / NULLIF(total_trials, 0), 2) AS completion_rate_pct
+       ROUND(
+           100.0 * completed_trials / NULLIF(total_trials, 0),
+           2
+       ) AS completion_rate_pct
   FROM intervention_completion
  WHERE total_trials >= 5
  ORDER BY completion_rate_pct DESC, total_trials DESC, intervention_name
@@ -53,6 +67,7 @@ SELECT intervention_name, intervention_type, total_trials, completed_trials,
 -- ============================================================
 -- Count distinct trials instead of locations to avoid inflating
 -- countries where the same trial has multiple facilities.
+
 SELECT country,
        COUNT(DISTINCT nct_id) AS total_trials,
        COUNT(*) AS total_locations
