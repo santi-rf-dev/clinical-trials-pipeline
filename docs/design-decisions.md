@@ -113,7 +113,7 @@ The following tables were implemented:
 
 A dimensional model was intentionally not used.
 
-The challenge explicitly requests a normalized database schema, and the source data is naturally relational.
+A normalized database schema was selected because the source data is naturally relational and contains multiple one-to-many and many-to-many relationships.
 
 A star schema would be more appropriate as a downstream analytical layer rather than as the operational storage model.
 

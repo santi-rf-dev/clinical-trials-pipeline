@@ -134,6 +134,7 @@ def load_tables(
         if_exists="append",
         index=False,
         method="multi",
+        chunksize=1000,
     )
 
     tables["conditions"].to_sql(
@@ -143,6 +144,7 @@ def load_tables(
         if_exists="append",
         index=False,
         method="multi",
+        chunksize=1000,
     )
 
     tables["interventions"].to_sql(
@@ -152,6 +154,7 @@ def load_tables(
         if_exists="append",
         index=False,
         method="multi",
+        chunksize=1000,
     )
 
     tables["locations"].to_sql(
@@ -161,6 +164,7 @@ def load_tables(
         if_exists="append",
         index=False,
         method="multi",
+        chunksize=1000,
     )
 
     # Resolve generated identifiers
@@ -183,6 +187,7 @@ def load_tables(
         if_exists="append",
         index=False,
         method="multi",
+        chunksize=1000,
     )
 
     study_interventions.to_sql(
@@ -192,6 +197,7 @@ def load_tables(
         if_exists="append",
         index=False,
         method="multi",
+        chunksize=1000,
     )
 
     logger.info("Database load completed successfully.")
