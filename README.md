@@ -230,9 +230,10 @@ This prototype intentionally prioritizes clarity and maintainability over produc
 Current limitations include:
 
 - Full refresh loading instead of incremental loading.
-- Single data source (ClinicalTrials.gov API v2).
-- Sequential execution without workflow orchestration.
-- Local PostgreSQL deployment intended for development purposes.
+- Single data source (ClinicalTrials.gov API v2). The extraction layer was intentionally designed to allow additional adapters (e.g. CSV files or SQL databases) to be incorporated in the future.
+- Sequential execution without workflow orchestration. For a prototype of this size, a simple Python entry point keeps the solution easier to understand.
+- Docker Compose is currently used to provision PostgreSQL, while the Python application runs in a local virtual environment.
+- The data model focuses on the entities required to answer the proposed analytical questions. Additional entities such as outcomes, adverse events and sponsor information could be incorporated in future iterations.
 - Basic data quality validation focused on the challenge requirements.
 
 ---
@@ -248,9 +249,9 @@ Approximate effort invested:
 | ETL implementation |  2 h |
 | SQL analytics |  1 h |
 | Testing |  1 h |
-| Documentation & polishing |  3 h |
+| Documentation & polishing |  4 h |
 
-**Total effort:** ~11 hours
+**Total effort:** ~12 hours
 
 ---
 
