@@ -1,6 +1,23 @@
 # Design Decisions
 
-This document summarizes the main architectural, modeling and implementation decisions made during the development of the Clinical Trial Data Pipeline.
+This document summarizes the main architectural, modelling and implementation decisions behind the Clinical Trial Data Pipeline, together with the rationale for the chosen scope and future evolution of the project.
+
+---
+
+## Prototype Scope
+
+This project was developed as a focused Data Engineering prototype.
+
+The implementation prioritizes the core aspects of architecture, ETL design, relational data modelling, validation, testing and documentation.
+
+Several capabilities that could be expected in a production-ready solution were intentionally left outside the current scope, including:
+
+- additional data sources (CSV files and SQL databases)
+- workflow orchestration
+- web interfaces (e.g. Streamlit or FastAPI)
+- outcome and adverse event modelling
+
+These features would add value in a production environment, but were intentionally deferred to keep the prototype focused on its core objectives.
 
 ---
 
@@ -48,7 +65,7 @@ Each stage is implemented independently, making the pipeline easier to maintain,
 
 Before implementing the pipeline, an exploratory analysis of the API response was performed.
 
-The objective was to understand the JSON structure, identify the available entities and design an appropriate relational model.
+The objective was to understand the JSON structure, identify the available entities and define an appropriate relational schema.
 
 Only the original study data contained in the `protocolSection` was considered for the first version.
 
@@ -76,7 +93,7 @@ Responsible for validating the transformed data before loading it into PostgreSQ
 
 Responsible for creating the PostgreSQL schema and loading the transformed data while preserving referential integrity.
 
-The current implementation performs a full refresh by recreating the target schema after the extracted data has been successfully transformed and validated.
+The current implementation performs a full refresh by recreating the target schema only after the extracted data has been successfully transformed and validated.
 
 ---
 
@@ -194,9 +211,9 @@ Examples include:
 
 ---
 
-## Scope
+## Supported API Modules
 
-Some API modules were intentionally excluded from the first version.
+Only the API modules required to support the analytical objectives of this project were included.
 
 Excluded modules:
 
@@ -208,8 +225,6 @@ Potential future extensions:
 
 - sponsorCollaboratorsModule
 - outcomesModule
-
-These modules were excluded because they are not required to support the analytical objectives of this project.
 
 ---
 
@@ -262,14 +277,15 @@ The objective is to balance query performance and insertion cost.
 ### Data Engineering
 
 - Incremental loading
+- Support for additional data sources (CSV and SQL databases)
 - Distributed processing with PySpark
 - Database partitioning
 
-### Data Quality
+### Architecture
 
-- MeSH terminology normalization
-- Data quality reports
-- Additional validation rules
+- Workflow orchestration (e.g. Luigi or Airflow)
+- Dockerized application
+- API retry strategy with exponential backoff
 
 ### Data Model
 
@@ -277,8 +293,18 @@ The objective is to balance query performance and insertion cost.
 - Outcome measures
 - Eligibility criteria
 
+### Data Quality
+
+- MeSH terminology normalization
+- Data quality reports
+- Additional validation rules
+
 ### Operations
 
 - Pipeline monitoring and alerting
 - Enhanced logging
 - Data lineage
+
+### User Experience
+
+- Interactive web interface using Streamlit for data exploration and visualization.
